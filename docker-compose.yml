@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.0
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bank-account-db
+    networks:
+      - postgres-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "mateuspada@live.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - "12345:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+networks:
+  postgres-network:
+    driver: bridge
